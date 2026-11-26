@@ -12,6 +12,17 @@ Run it with the project virtual environment:
 
 Or open `Q2a/Q2a_CNN.ipynb` in Jupyter and select the Python kernel from `.venv`.
 
+### Running in another environment
+
+The setup cell searches the current directory, its parents, common hosted-runtime mount points, and Jupyter path variables for the notebook or its `results/` folder. If your runtime keeps the files somewhere else, set `Q2A_PROJECT_DIR` before running the setup cell:
+
+```python
+import os
+os.environ["Q2A_PROJECT_DIR"] = "/path/to/folder-containing-Q2a_CNN.ipynb"
+```
+
+You can also point it at the parent folder that contains `Q2a/`. The error message lists every path that was searched.
+
 ## Original scripts
 
 The original standalone scripts (`common.py`, `q2_cnn.py`, `q2_random_search.py`, `reproduce_confusion.py`) have been removed after their code was copied into the notebook. Their behavior is preserved in these notebook sections:
