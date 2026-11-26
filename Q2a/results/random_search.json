@@ -1,0 +1,195 @@
+{
+  "trials": [
+    {
+      "lr": 0.0001526094648129323,
+      "dropout": 0.2,
+      "dense_units": 512,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 64,
+      "epochs_run": 30,
+      "val_acc": 0.6832000017166138
+    },
+    {
+      "lr": 0.0008109581224658478,
+      "dropout": 0.5,
+      "dense_units": 256,
+      "filters": [
+        32,
+        64,
+        128
+      ],
+      "augment": true,
+      "batch": 128,
+      "epochs_run": 30,
+      "val_acc": 0.6474000215530396
+    },
+    {
+      "lr": 0.0002771473968728251,
+      "dropout": 0.3,
+      "dense_units": 256,
+      "filters": [
+        32,
+        64,
+        128
+      ],
+      "augment": true,
+      "batch": 32,
+      "epochs_run": 22,
+      "val_acc": 0.6370000243186951
+    },
+    {
+      "lr": 0.0001817459118418355,
+      "dropout": 0.2,
+      "dense_units": 512,
+      "filters": [
+        32,
+        64,
+        128
+      ],
+      "augment": true,
+      "batch": 64,
+      "epochs_run": 30,
+      "val_acc": 0.6269999742507935
+    },
+    {
+      "lr": 0.00010578237701278464,
+      "dropout": 0.2,
+      "dense_units": 512,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 128,
+      "epochs_run": 30,
+      "val_acc": 0.6179999709129333
+    },
+    {
+      "lr": 0.0010397269435881375,
+      "dropout": 0.4,
+      "dense_units": 256,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 32,
+      "epochs_run": 30,
+      "val_acc": 0.6118000149726868
+    },
+    {
+      "lr": 0.0008727093859002807,
+      "dropout": 0.4,
+      "dense_units": 128,
+      "filters": [
+        32,
+        64,
+        128
+      ],
+      "augment": true,
+      "batch": 32,
+      "epochs_run": 17,
+      "val_acc": 0.5952000021934509
+    },
+    {
+      "lr": 0.0011633911675930032,
+      "dropout": 0.5,
+      "dense_units": 256,
+      "filters": [
+        32,
+        64,
+        128
+      ],
+      "augment": true,
+      "batch": 32,
+      "epochs_run": 26,
+      "val_acc": 0.5863999724388123
+    },
+    {
+      "lr": 0.0018470986072102714,
+      "dropout": 0.4,
+      "dense_units": 128,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 128,
+      "epochs_run": 23,
+      "val_acc": 0.5325999855995178
+    },
+    {
+      "lr": 0.0007871809912482117,
+      "dropout": 0.5,
+      "dense_units": 512,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 64,
+      "epochs_run": 11,
+      "val_acc": 0.4934000074863434
+    },
+    {
+      "lr": 0.0024055553374802115,
+      "dropout": 0.3,
+      "dense_units": 512,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 32,
+      "epochs_run": 10,
+      "val_acc": 0.09459999948740005
+    },
+    {
+      "lr": 0.0028106885617398374,
+      "dropout": 0.3,
+      "dense_units": 512,
+      "filters": [
+        64,
+        128,
+        256
+      ],
+      "augment": true,
+      "batch": 64,
+      "epochs_run": 6,
+      "val_acc": 0.09459999948740005
+    }
+  ],
+  "best_config": {
+    "lr": 0.0001526094648129323,
+    "dropout": 0.2,
+    "dense_units": 512,
+    "filters": [
+      64,
+      128,
+      256
+    ],
+    "augment": true,
+    "batch": 64,
+    "epochs_run": 30,
+    "val_acc": 0.6832000017166138
+  },
+  "best_val_acc": 0.6832000017166138,
+  "test_loss": 0.9925543665885925,
+  "test_acc": 0.6844000220298767,
+  "reference_test_acc": {
+    "baseline": 0.583299994468689,
+    "dropout": 0.6765999794006348,
+    "augmentation": 0.6887999773025513,
+    "dropout+aug": 0.669700026512146
+  }
+}
