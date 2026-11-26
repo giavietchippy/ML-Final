@@ -12,16 +12,49 @@ Run it with the project virtual environment:
 
 Or open `Q2a/Q2a_CNN.ipynb` in Jupyter and select the Python kernel from `.venv`.
 
-### Running in another environment
+### Running on Google Colab
 
-The setup cell searches the current directory, its parents, common hosted-runtime mount points, and Jupyter path variables for the notebook or its `results/` folder. If your runtime keeps the files somewhere else, set `Q2A_PROJECT_DIR` before running the setup cell:
+Colab does not place the notebook file on disk and has no access to your local `results/` folder, so you must upload the project artifacts. The setup cell searches the current directory, its parents, mounted Google Drive, and common upload locations.
+
+Easiest option — upload a zip of the whole `Q2a` folder and let the notebook extract it automatically:
+
+```python
+from google.colab import files
+files.upload()  # choose Q2a.zip
+```
+
+Then run all cells. The setup cell extracts `Q2a.zip` into `/content/Q2a` and finds the artifacts there.
+
+Other options:
+
+- Mount Drive (`from google.colab import drive; drive.mount('/content/drive')`) and put the `Q2a` folder in `MyDrive`.
+- Upload just the `results/` folder so it appears as `/content/results`.
+- Set the path explicitly before the setup cell:
 
 ```python
 import os
-os.environ["Q2A_PROJECT_DIR"] = "/path/to/folder-containing-Q2a_CNN.ipynb"
+os.environ["Q2A_PROJECT_DIR"] = "/content/Q2a"
 ```
 
-You can also point it at the parent folder that contains `Q2a/`. The error message lists every path that was searched.
+The error message lists every path that was searched.
+
+### `ModuleNotFoundError: No module named 'tensorflow'`
+
+This means the selected kernel does not have the project dependencies installed. It is not caused by the folder path.
+
+On Colab, install the requirements in a notebook cell and then restart the runtime:
+
+```python
+%pip install -r /content/Q2a/requirements.txt
+```
+
+Locally, select the kernel from the project `.venv`, or register it once with:
+
+```powershell
+& 'D:\work\Machine Learning\.venv\Scripts\python.exe' -m ipykernel install --user --name q2a-venv
+```
+
+Then choose the `q2a-venv` kernel in Jupyter.
 
 ## Original scripts
 
