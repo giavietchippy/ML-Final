@@ -2,70 +2,149 @@
 
 ## Main entry point
 
-**`Q2a_CNN.ipynb` is the main entry point for this project.** It is self-contained: all code is copied into notebook cells, and it does not import from the `.py` files. By default it performs no training and instead reads and displays the artifacts already stored in `results/`.
+`Q2a_CNN.ipynb` is the main entry point for this project. It is self-contained: all code is copied into notebook cells, and it does **not** import from any `.py` file. The original standalone scripts have been removed.
 
-Run it with the project virtual environment:
+By default, all training switches are `False`. The notebook does no training; it reads and displays the artifacts already saved in `results/`.
+
+This guide assumes a **local machine**. Colab is not recommended because it starts with an empty CIFAR-10 cache and would download the dataset unless you upload the cache yourself.
+
+---
+
+## What to copy to another machine
+
+Copy this whole folder:
+
+```text
+Q2a/
+├── Q2a_CNN.ipynb
+├── README.md
+├── requirements.txt
+├── requirements-lock.txt
+├── results/
+│   ├── results.json
+│   ├── random_search.json
+│   ├── curves_*.png
+│   ├── confusion_*.png
+│   └── exact/
+│       ├── confusion_analysis.json
+│       ├── confusion_analysis.md
+│       ├── y_test.npy
+│       ├── y_pred_baseline.npy
+│       └── y_pred_tuned.npy
+└── logs/                (optional, but useful evidence of the original runs)
+```
+
+Do **not** copy `.venv/`, `__pycache__/`, `results_nb/`, or `*.keras` model files.
+
+---
+
+## Setup on a new machine
+
+### 1. Create a virtual environment
+
+From inside the copied `Q2a/` folder:
+
+**Windows PowerShell**
 
 ```powershell
-.\.venv\Scripts\python.exe -m jupyter nbconvert --to notebook --execute --inplace Q2a/Q2a_CNN.ipynb
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Or open `Q2a/Q2a_CNN.ipynb` in Jupyter and select the Python kernel from `.venv`.
+**macOS / Linux**
 
-### Running on Google Colab
-
-Colab does not place the notebook file on disk and has no access to your local `results/` folder, so you must upload the project artifacts. The setup cell searches the current directory, its parents, mounted Google Drive, and common upload locations.
-
-Easiest option — upload a zip of the whole `Q2a` folder and let the notebook extract it automatically:
-
-```python
-from google.colab import files
-files.upload()  # choose Q2a.zip
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements.txt
 ```
 
-Then run all cells. The setup cell extracts `Q2a.zip` into `/content/Q2a` and finds the artifacts there.
+Python 3.13 was used originally. Use any Python version supported by the TensorFlow version you install.
 
-Other options:
-
-- Mount Drive (`from google.colab import drive; drive.mount('/content/drive')`) and put the `Q2a` folder in `MyDrive`.
-- Upload just the `results/` folder so it appears as `/content/results`.
-- Set the path explicitly before the setup cell:
-
-```python
-import os
-os.environ["Q2A_PROJECT_DIR"] = "/content/Q2a"
-```
-
-The error message lists every path that was searched.
-
-### `ModuleNotFoundError: No module named 'tensorflow'`
-
-This means the selected kernel does not have the project dependencies installed. It is not caused by the folder path.
-
-On Colab, install the requirements in a notebook cell and then restart the runtime:
-
-```python
-%pip install -r /content/Q2a/requirements.txt
-```
-
-Locally, select the kernel from the project `.venv`, or register it once with:
+For an exact dependency match, install `requirements-lock.txt` instead of `requirements.txt`, then add the notebook tools:
 
 ```powershell
-& 'D:\work\Machine Learning\.venv\Scripts\python.exe' -m ipykernel install --user --name q2a-venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.\.venv\Scripts\python.exe -m pip install ipykernel nbformat nbconvert
 ```
 
-Then choose the `q2a-venv` kernel in Jupyter.
+`requirements-lock.txt` is intentionally left unchanged and therefore does not list the notebook packages.
 
-## Original scripts
+### 2. Make sure CIFAR-10 is cached
 
-The original standalone scripts (`common.py`, `q2_cnn.py`, `q2_random_search.py`, `reproduce_confusion.py`) have been removed after their code was copied into the notebook. Their behavior is preserved in these notebook sections:
+The notebook calls `keras.datasets.cifar10.load_data()`. Keras downloads CIFAR-10 only if it is not already in the cache.
 
-- Section 2 — utilities from `common.py`
-- Section 5 — four-configuration experiment from `q2_cnn.py`
-- Section 6 — exact confusion analysis from `reproduce_confusion.py`
-- Section 7 — random search from `q2_random_search.py`
+Default cache locations:
 
-`Q2a_CNN_Report.docx` remains as the original written report.
+| OS | Cache folder |
+|---|---|
+| Windows | `%USERPROFILE%\.keras\datasets\` |
+| macOS / Linux | `$HOME/.keras/datasets/` |
+
+The cache should contain:
+
+```text
+cifar-10-batches-py-target/
+cifar-10-batches-py-target_archive
+```
+
+To avoid a slow download, copy those two items from a machine that already has them into the new machine's Keras cache folder. The cache is per user account, not per Python environment.
+
+If the cache is empty, the first notebook run will download the archive and will be slower.
+
+---
+
+## Running the notebook
+
+### Option A — command line
+
+From inside the `Q2a/` folder:
+
+**Windows PowerShell**
+
+```powershell
+.\.venv\Scripts\python.exe -m jupyter nbconvert --to notebook --execute --inplace Q2a_CNN.ipynb
+```
+
+**macOS / Linux**
+
+```bash
+.venv/bin/python -m jupyter nbconvert --to notebook --execute --inplace Q2a_CNN.ipynb
+```
+
+### Option B — Jupyter / VS Code
+
+Open `Q2a_CNN.ipynb` and select the Python kernel from the `.venv` you created. If it is not listed, register it once:
+
+**Windows PowerShell**
+
+```powershell
+.\.venv\Scripts\python.exe -m ipykernel install --user --name q2a-venv
+```
+
+**macOS / Linux**
+
+```bash
+.venv/bin/python -m ipykernel install --user --name q2a-venv
+```
+
+Then choose the `q2a-venv` kernel and run all cells.
+
+---
+
+## What a successful run should show
+
+- All cells execute without errors.
+- Section 3 prints the data shapes and displays a sample image grid.
+- Section 4 prints the baseline model summary and parameter count.
+- Section 5 prints the four-configuration table from `results/results.json`.
+- Section 7 prints the tuned test accuracy from `results/random_search.json`.
+- Section 8 prints the comparison table and reproducibility note.
+
+No GPU is required for the default mode because no training happens.
+
+---
 
 ## Training switches
 
@@ -77,7 +156,73 @@ Section 1 of the notebook has three switches. All are `False` by default:
 | `RUN_RANDOM_SEARCH` | Reruns the random search with early stopping |
 | `RUN_CONFUSION_REPRO` | Retrains baseline and best-tuned models for the exact confusion analysis |
 
-If **any** switch is `True`, every file generated by the notebook is written only to the new `results_nb/` directory. The notebook never writes to `results/`. The saved artifacts in `results/` and `requirements-lock.txt` remain unchanged.
+If **any** switch is `True`, every file generated by the notebook is written only to a new `results_nb/` directory. The notebook never writes to `results/`. The saved artifacts in `results/` and `requirements-lock.txt` remain unchanged.
+
+Training is CPU-friendly but slow; a GPU is optional.
+
+---
+
+## Path detection
+
+The setup cell searches for `Q2a_CNN.ipynb` or `results/results.json` in:
+
+- the current directory and its parents
+- mounted Google Drive locations
+- common upload locations such as `/mnt/data`, `/content`, and `/kaggle/input`
+- environment variables including `Q2A_PROJECT_DIR`
+
+If the notebook cannot find the project, set `Q2A_PROJECT_DIR` before the setup cell:
+
+**Windows**
+
+```python
+import os
+os.environ["Q2A_PROJECT_DIR"] = r"D:\path\to\Q2a"
+```
+
+**macOS / Linux**
+
+```python
+import os
+os.environ["Q2A_PROJECT_DIR"] = "/path/to/Q2a"
+```
+
+It can point either to the folder containing `Q2a_CNN.ipynb`, or to the parent folder containing `Q2a/`.
+
+---
+
+## Troubleshooting
+
+### `ModuleNotFoundError: No module named 'tensorflow'`
+
+The selected kernel does not have the project dependencies. Select the `q2a-venv` kernel, or install the requirements into the current kernel.
+
+### `RuntimeError: Could not find Q2a_CNN.ipynb or results/results.json`
+
+The notebook cannot locate the project folder. Set `Q2A_PROJECT_DIR` as described above.
+
+### Very slow CIFAR-10 download
+
+The Keras cache is empty. Copy the cached CIFAR-10 files into `%USERPROFILE%\.keras\datasets\` on Windows or `$HOME/.keras/datasets/` on macOS/Linux before running the notebook.
+
+### `ModuleNotFoundError: No module named 'ipykernel'`
+
+Install the notebook tools:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install ipykernel nbformat nbconvert
+```
+
+---
+
+## Original scripts
+
+The original standalone scripts (`common.py`, `q2_cnn.py`, `q2_random_search.py`, `reproduce_confusion.py`) have been removed after their code was copied into the notebook. Their behavior is preserved in these notebook sections:
+
+- Section 2 — utilities from `common.py`
+- Section 5 — four-configuration experiment from `q2_cnn.py`
+- Section 6 — exact confusion analysis from `reproduce_confusion.py`
+- Section 7 — random search from `q2_random_search.py`
 
 ## Dependencies
 
